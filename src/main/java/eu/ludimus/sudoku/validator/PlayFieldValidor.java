@@ -1,6 +1,7 @@
 package eu.ludimus.sudoku.validator;
 
 import eu.ludimus.sudoku.PlayField;
+import eu.ludimus.sudoku.SudokuSolver;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -17,16 +18,14 @@ public class PlayFieldValidor implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         PlayField field = (PlayField) o;
-        int count = 0;
-        for(List<Integer> list : field.getValues()) {
+        final List<List<Integer>> solved = new SudokuSolver(field.getValues()).solve();
+        for(List<Integer> list : solved) {
             for(Integer i : list) {
-                if(i != 0) {
-                    count++;
+                if(i == 0) {
+                    errors.rejectValue("values","values[invalidLength]", "This puzzle is unsolvable! Fill in different values");
+                    return;
                 }
             }
         }
-        if(count < 17) {
-            errors.rejectValue("values","values[invalidLength]", "Minimal filled in digits should be 17, otherwise it is impossible to solve the puzzle");
-        };
     }
 }
