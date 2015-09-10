@@ -8,10 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClientException;
 
 import javax.annotation.PostConstruct;
@@ -36,8 +33,11 @@ public class SudokuController {
 
     @RequestMapping(value = "/solve", method = RequestMethod.POST)
     @ResponseBody
-    public HttpEntity<PlayField> solve(@RequestBody PlayField playField, Model model) {
-        playField.setValues(new SudokuSolver(playField.getValues()).solve());
+    public HttpEntity<PlayField> solve(@RequestParam(value = "step", required = false) Boolean step, @RequestBody PlayField playField, Model model) {
+        if(step == null) {
+            step = false;
+        }
+        playField.setValues(new SudokuSolver(playField.getValues()).solve(step));
         return new ResponseEntity<>(playField, HttpStatus.OK);
     }
 

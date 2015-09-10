@@ -15,8 +15,8 @@ function Sudoku($scope, $http) {
         success(function(data) {
             $scope.playfields = data;
         });
-    $scope.solve = function() {
-        $http.post('/solve', $scope.item).
+    $scope.solve = function(step) {
+        $http.post('/solve?step='+step, $scope.item).
             success(function(data) {
                 $scope.item = data;
             }).

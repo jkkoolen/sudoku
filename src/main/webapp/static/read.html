@@ -8,8 +8,11 @@
             <td width="30px" data-ng-repeat="col in row">{{col}}</td>
         </tr>
         <tr>
-            <td colspan="9">
-                <button id="solve" data-ng-click="solve()">solve</button>
+            <td colspan="4">
+                <button id="solve" data-ng-click="solve(false)">solve</button>
+            </td>
+            <td colspan="5">
+                <button id="step" data-ng-click="solve(true)">solve 1 step</button>
             </td>
         </tr>
     </table>

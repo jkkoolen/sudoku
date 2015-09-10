@@ -39,19 +39,25 @@ public class SudokuSolver {
         this.values = values;
     }
 
-    public List<List<Integer>> solve() {
+    public List<List<Integer>> solve(boolean isOneStep) {
         for(int i = 0; i < values.size(); i++) {
             for(int j = 0; j < values.get(i).size(); j++) {
                 if(values.get(i).get(j) == NO_VALUE) {
                     final List<Integer> missing = missing(getMissingInRow(i), getMissingInColumn(j), getMissingInQuadrant(Quadrant.getQuadrant(i, j)));
                     if(missing.size() == 1) {
                         values.get(i).set(j,missing.get(0));
-                        solve();
+                        if(isOneStep) {
+                            return values;
+                        }
                     }
                 }
             }
         }
         return values;
+    }
+
+    public List<List<Integer>> solve() {
+        return solve(false);
     }
 
     private List<Integer> missing(List<Integer>... lists) {
