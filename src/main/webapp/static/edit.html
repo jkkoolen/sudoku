@@ -1,0 +1,12 @@
+<form>
+    <table>
+        <tr data-ng-repeat="row in field.values">
+            <td width="30px" data-ng-repeat="col in row"><input size="2" type="text" ng-model="field.values[$parent.$index][$index]"/></td>
+        </tr>
+        <tr>
+            <td colspan="9">
+                <button id="add" data-ng-click="add()">add</button>
+            </td>
+        </tr>
+    </table>
+ </form>

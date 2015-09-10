@@ -1,0 +1,16 @@
+<form>
+    <select ng-options="field as field.values[0] for field in playfields.fields"
+            ng-model="$parent.item">
+        <!--because this is an included page i have to set item to the parent scope-->
+    </select>
+    <table>
+        <tr data-ng-repeat="row in item.values">
+            <td width="30px" data-ng-repeat="col in row">{{col}}</td>
+        </tr>
+        <tr>
+            <td colspan="9">
+                <button id="solve" data-ng-click="solve()">solve</button>
+            </td>
+        </tr>
+    </table>
+ </form>
