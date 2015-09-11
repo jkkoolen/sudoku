@@ -1,5 +1,6 @@
 package eu.ludimus.sudoku;
 
+import eu.ludimus.sudoku.io.ReaderWriter;
 import eu.ludimus.sudoku.validator.PlayFieldValidor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -16,13 +17,17 @@ import java.io.IOException;
 
 @Controller
 public class SudokuController {
-    private PlayFields playFields = new PlayFields();
+    private PlayFields playFields;
     @Autowired
     private PlayFieldValidor playFieldValidor;
+    @Autowired
+    private ReaderWriter<PlayFields> readerWriter;
+    @Autowired
+    private SudokuSolver sudokuSolver;
 
     @PostConstruct
     public void read() throws IOException {
-        playFields.read();
+        playFields = readerWriter.read();
     }
 
     @RequestMapping(value = "/playfields", method = RequestMethod.GET)
@@ -37,7 +42,7 @@ public class SudokuController {
         if(step == null) {
             step = false;
         }
-        playField.setValues(new SudokuSolver(playField.getValues()).solve(step));
+        playField.setValues(sudokuSolver.solve(playField.getValues(), step));
         return new ResponseEntity<>(playField, HttpStatus.OK);
     }
 
@@ -49,7 +54,7 @@ public class SudokuController {
             throw new RestClientException(result.getFieldErrors().get(0).getDefaultMessage());
         }
         playFields.getFields().add(playField);
-        playFields.write();
+        readerWriter.write(playFields);
         return playfields(model);
     }
 

@@ -1,13 +1,17 @@
 package eu.ludimus.sudoku;
 
+import org.springframework.stereotype.Component;
+
 import java.util.*;
 
+@Component
 public class SudokuSolver {
 
     private static final int QUADRANT_SIZE = 3;
     private static final int NO_VALUE = 0;
     private static final List<Integer> POSSIBLE_VALUES = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9);
-    private List<List<Integer>> values;
+    private static final int ARRAY_SIZE = 9;
+    private static final int SOLVABLE = 1;
 
     enum Quadrant {
         FIRST(0,0)
@@ -35,24 +39,22 @@ public class SudokuSolver {
         }
     }
 
-    public SudokuSolver(List<List<Integer>> values) {
-        this.values = values;
-    }
-
-    public List<List<Integer>> solve(boolean isOneStep) {
+    public List<List<Integer>> solve(List<List<Integer>> values, boolean isOneStep) {
         for(int i = 0; i < values.size(); i++) {
             for(int j = 0; j < values.get(i).size(); j++) {
                 if(values.get(i).get(j) == null) { //because controller does not add null values to list
                     values.get(i).set(j, 0);
                 }
                 if(values.get(i).get(j) == NO_VALUE) {
-                    final List<Integer> missing = missing(getMissingInRow(i), getMissingInColumn(j), getMissingInQuadrant(Quadrant.getQuadrant(i, j)));
-                    if(missing.size() == 1) {
+                    final List<Integer> missing = missing(getMissingInRow(values, i),
+                            getMissingInColumn(values, j),
+                            getMissingInQuadrant(values, Quadrant.getQuadrant(i, j)));
+                    if(missing.size() == SOLVABLE) {
                         values.get(i).set(j, missing.get(0));
                         if(isOneStep) {
                             return values;
                         }
-                        solve(isOneStep);
+                        solve(values, isOneStep);
                     }
                 }
             }
@@ -60,13 +62,13 @@ public class SudokuSolver {
         return values;
     }
 
-    public List<List<Integer>> solve() {
-        return solve(false);
+    public List<List<Integer>> solve(List<List<Integer>> values) {
+        return solve(values, false);
     }
 
     private List<Integer> missing(List<Integer>... lists) {
         List<Integer> result = new ArrayList();
-        for(int i = 1; i <= values.size(); i++) {
+        for(int i = 1; i <= ARRAY_SIZE; i++) {
             boolean found = true;
             for(List<Integer> list : lists) {
                 found = found && list.contains(i);
@@ -78,7 +80,7 @@ public class SudokuSolver {
         return result;
     }
 
-    private List<Integer> getMissingInRow(int row) {
+    private List<Integer> getMissingInRow(List<List<Integer>> values, int row) {
         Set<Integer> result = new LinkedHashSet<Integer>(POSSIBLE_VALUES);
         for(int i = 0; i < values.get(row).size(); i++) {
             result.remove(values.get(row).get(i));
@@ -86,7 +88,7 @@ public class SudokuSolver {
         return new ArrayList(result);
     }
 
-    private List<Integer> getMissingInColumn(int column) {
+    private List<Integer> getMissingInColumn(List<List<Integer>> values, int column) {
         Set<Integer> result = new LinkedHashSet<Integer>(POSSIBLE_VALUES);
         for(int i = 0; i < values.size(); i++) {
             result.remove(values.get(i).get(column));
@@ -94,7 +96,7 @@ public class SudokuSolver {
         return new ArrayList(result);
     }
 
-    private List<Integer> getMissingInQuadrant(Quadrant quadrant) {
+    private List<Integer> getMissingInQuadrant(List<List<Integer>> values, Quadrant quadrant) {
         Set<Integer> result = new LinkedHashSet<Integer>(POSSIBLE_VALUES);
         int rowEnd = quadrant.row + QUADRANT_SIZE;
         int columnEnd = quadrant.column + QUADRANT_SIZE;
