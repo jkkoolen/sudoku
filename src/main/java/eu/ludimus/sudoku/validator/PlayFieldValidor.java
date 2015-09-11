@@ -18,6 +18,7 @@ public class PlayFieldValidor implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         PlayField field = (PlayField) o;
+
         final List<List<Integer>> solved = new SudokuSolver(field.getValues()).solve();
         for(List<Integer> list : solved) {
             for(Integer i : list) {

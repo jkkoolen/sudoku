@@ -44,7 +44,7 @@ public class SudokuController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
     public HttpEntity<PlayFields> add(@RequestBody PlayField playField, BindingResult result, Model model) throws IOException {
-        playFieldValidor.validate(playField, result);
+        playFieldValidor.validate(playField.clone(), result);
         if(result.hasErrors()) {
             throw new RestClientException(result.getFieldErrors().get(0).getDefaultMessage());
         }

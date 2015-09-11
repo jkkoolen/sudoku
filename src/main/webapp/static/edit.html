@@ -1,7 +1,7 @@
 <form>
     <table>
         <tr data-ng-repeat="row in field.values">
-            <td width="30px" data-ng-repeat="col in row"><input size="2" type="text" ng-model="field.values[$parent.$index][$index]"/></td>
+            <td width="30px" data-ng-repeat="col in row"><input size="2" ng-maxlength="1" ng-pattern="/[1-9]/" ng-model="field.values[$parent.$index][$index]"/></td>
         </tr>
         <tr>
             <td colspan="9">
