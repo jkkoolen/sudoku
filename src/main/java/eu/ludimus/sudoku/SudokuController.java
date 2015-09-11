@@ -42,7 +42,7 @@ public class SudokuController {
         if(step == null) {
             step = false;
         }
-        playField.setValues(sudokuSolver.solve(playField.getValues(), step));
+        playField.setValues(sudokuSolver.solve(playField, step));
         return new ResponseEntity<>(playField, HttpStatus.OK);
     }
 
