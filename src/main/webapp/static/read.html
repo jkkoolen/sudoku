@@ -1,18 +1,22 @@
 <form>
-    <select ng-options="field as field.values[0] for field in playfields.fields"
-            ng-model="$parent.item">
-        <!--because this is an included page i have to set item to the parent scope-->
-    </select>
-    <table>
-        <tr data-ng-repeat="row in item.values">
-            <td width="30px" data-ng-repeat="col in row">{{col}}</td>
+    <img src="../public/image/sudoku.png" width="350px" height="300px"/>
+    <table style="position:absolute;left:72px;top:70px">
+        <tr>
+            <td colspan="9">
+                <select ng-options="field as field.values[0] for field in playfields.fields"
+                        ng-model="$parent.item"/>
+                    <!--because this is an included page i have to set item to the parent scope-->
+            </td>
+        </tr>
+        <tr ng-repeat="row in item.values track by $index">
+            <td width="30px" ng-repeat="col in row track by $index">{{col}}</td>
         </tr>
         <tr>
             <td colspan="4">
-                <button id="solve" data-ng-click="solve(false)">solve</button>
+                <button id="solve" ng-click="solve(false)">solve</button>
             </td>
             <td colspan="5">
-                <button id="step" data-ng-click="solve(true)">solve 1 step</button>
+                <button id="step" ng-click="solve(true)">solve 1 step</button>
             </td>
         </tr>
     </table>

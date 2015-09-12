@@ -1,5 +1,7 @@
-function Sudoku($scope, $http) {
-    $scope.field = {"values":[
+var sudokuApp = angular.module('sudokuApp', []);
+
+sudokuApp.controller('Sudoku', function($scope, $http) {
+    $scope.initialField = {"values":[
         [0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0],
@@ -10,10 +12,11 @@ function Sudoku($scope, $http) {
         [0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0]
     ]};
-    $scope.original = angular.copy($scope.field);
+    $scope.clone = angular.copy($scope.initialField);
     $http.get('/playfields').
         success(function(data) {
             $scope.playfields = data;
+            $scope.item = data.fields[0];//default selected
         });
     $scope.solve = function(step) {
         $http.post('/solve?step='+step, $scope.item).
@@ -25,11 +28,11 @@ function Sudoku($scope, $http) {
             })
     }
     $scope.add = function() {
-        $http.post('/add', $scope.field).
+        $http.post('/add', $scope.clone).
             success(function(data) {
               $scope.playfields = data;
-              $scope.field = $scope.original;
-
+              $scope.item = data.fields[0];//default selected
+              $scope.clone = angular.copy($scope.initialField);
             })
             .error(function(data) {
                 alert(data.message);
@@ -52,6 +55,6 @@ function Sudoku($scope, $http) {
     $scope.isActiveTab = function(tabUrl) {
         return tabUrl == $scope.currentTab;
     }
-}
+});
 
 

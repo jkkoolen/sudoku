@@ -1,11 +1,12 @@
 <form>
-    <table>
-        <tr data-ng-repeat="row in field.values">
-            <td width="30px" data-ng-repeat="col in row"><input size="2" ng-maxlength="1" ng-pattern="/[1-9]/" ng-model="field.values[$parent.$index][$index]"/></td>
+    <img src="../public/image/sudoku.png" width="350px" height="300px"/>
+    <table style="position:absolute;left:72px;top:70px">
+        <tr ng-repeat="row in [1,2,3,4,5,6,7,8,9]">
+            <td width="30px" ng-repeat="col in [1,2,3,4,5,6,7,8,9]"><input size="2" ng-maxlength="1" ng-pattern="/[1-9]/" ng-model="clone.values[$parent.$index][$index]"/></td>
         </tr>
         <tr>
             <td colspan="9">
-                <button id="add" data-ng-click="add()">add</button>
+                <button id="add" ng-click="add()">add</button>
             </td>
         </tr>
     </table>

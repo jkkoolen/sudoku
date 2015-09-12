@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app>
+<html ng-app="sudokuApp">
 <head>
     <script src="public/angular/angular.min.js"></script>
     <script src="public/js/sudoku.js"></script>
